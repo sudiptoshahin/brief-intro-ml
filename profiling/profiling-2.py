@@ -72,7 +72,7 @@ if __name__ == '__main__':
         print(func_3())
         print_func()
 
-    # profile.print_stats()
+    profile.print_stats()
     # df = pd.DataFrame(profile.getstats(), columns=['ncalls', ''])
     # df.to_csv('/home/sudiptoshahin/Projects/JupyterNotebookFiles/brief-intro-ml/profiling/test.csv')
     df = profile_df(profile)
