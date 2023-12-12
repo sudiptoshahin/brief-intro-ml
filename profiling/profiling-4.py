@@ -23,6 +23,15 @@ def func_3():
     result = py_loop(1006500)
     return result
 
+def func_4():
+    result = py_loop(100)
+    return result
+
+def func_5():
+    time.sleep(3)
+    result = py_loop(30)
+    return result
+
 
 ################profiling################
 
@@ -109,24 +118,26 @@ class Profiling:
         df = pd.DataFrame(data, columns=cols)
         return df
 
-    def multiLineProfilerDataList(self):
+
+    def test(self, func):
         stream = StringIO()
-        lp_wrapper = None
+        output = ''
+        lp_wrapper = self.line_profiler(func)
+        lp_wrapper()
+        self.line_profiler.print_stats(stream=stream)
+        output = stream.getvalue()
+        lines = output.strip().split('\n')
+        newlines = [line.split() for line in lines]
+        output = ''
+        stream.close()
+        return newlines
+
+    def multiLineProfilerDataList(self):
         dataList = []
-        data = []
         for func in self._funcs:
-            lp_wrapper = self.line_profiler(func)
-            lp_wrapper()
-            self.line_profiler.print_stats(stream=stream)
-            output = stream.getvalue()
-            lines = output.strip().split('\n')
-            # dataList.append(lines)
-            print(lines)
-
-        # data = [ data[8:] for data in dataList ]
-        # data = dataList
-        # return data
-
+            fn = self.test(func)
+            dataList.append(fn)
+        return dataList[-1]
 
 
     def multilineprofiler_df(self):
@@ -136,8 +147,20 @@ class Profiling:
         data = []
         if self._funcs is not None or self._funcs is isinstance(self._funcs, list):
             rawList = self.multiLineProfilerDataList()
-            for l in rawList:
-                print(l)
+            empty_list_indices = [index for index, sublist in enumerate(rawList) if not sublist]
+            print(empty_list_indices)
+            # for data in rawList:
+            #     print(data)
+            data = []
+            for idx in range(len(empty_list_indices)):
+                if idx != 0 and idx != len(empty_list_indices)-2:
+                    obj = rawList[empty_list_indices[idx]: empty_list_indices[idx+1]]
+                    data.append(obj)
+                elif idx != 0 and idx != len(empty_list_indices)-1:
+                    obj = rawList[empty_list_indices[idx]: empty_list_indices[idx+1]]
+
+            print(data)
+
 
 
 
@@ -190,11 +213,13 @@ if __name__ == '__main__':
     print(func_1())
     print(func_2())
     print(func_3())
+    print(func_4())
+    print(func_5())
     # profiling.cProfilerDisable()
     # profiling.getCrofilerStat()
 
     profiling.setUniFunctionLP(func_1)
-    profiling.setMultiFunctionLP([func_1, func_2, func_3])
+    profiling.setMultiFunctionLP([func_1, func_2, func_3, func_4, func_5])
     # print(profiling.funcs)
     # profiling.getSingleLineProfilerStat()
     # print(profiling.multilineprofiler_df())
