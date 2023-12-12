@@ -66,12 +66,13 @@ def profile_df(profile_stats):
 
 
 if __name__ == '__main__':
-    with cProfile.Profile() as profile:
-        print(func_1())
-        print(func_2())
-        print(func_3())
-        print_func()
-
+    profile = cProfile.Profile()
+    profile.enable()
+    print(func_1())
+    print(func_2())
+    print(func_3())
+    print_func()
+    profile.disable()
     profile.print_stats()
     # df = pd.DataFrame(profile.getstats(), columns=['ncalls', ''])
     # df.to_csv('/home/sudiptoshahin/Projects/JupyterNotebookFiles/brief-intro-ml/profiling/test.csv')

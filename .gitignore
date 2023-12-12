@@ -4,3 +4,4 @@ dataset/video
 *.mpeg
 *.mov
 mot_labels.csv
+__pycache__/

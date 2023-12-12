@@ -1,3 +1,31 @@
+import time
+
+
+def py_loop(n):
+    result = 0
+    for i in range(n):
+        temp_res = (i + 1) ** 3
+        result += temp_res
+    return result
+
+
+def func_1():
+    time.sleep(5.23)
+    print(py_loop(20))
+
+
+def func_2():
+    result = py_loop(1020120)
+    return result
+
+
+def func_3():
+    result = py_loop(1006500)
+    return result
+
+
+################profiling################
+
 import pstats
 import time
 import subprocess
@@ -32,11 +60,11 @@ class Profiling:
 
     # cp = cProfiler
     # lp = line_profiler
-
     @property
     def func(self):
-        return self.func
+        return self._func
 
+    # @func.setter
     def setUniFunctionLP(self, func):
         self._func = func
 
@@ -44,20 +72,18 @@ class Profiling:
     def funcs(self):
         return self._funcs
 
-    def setMultiFunctionLP(self, funcs: list):
+    # @funcs.setter
+    def setMultiFunctionLP(self, funcs):
         self._funcs = funcs
 
-    @classmethod
-    def cProfilerEnable(cls, self):
-        if self.profiler == 'cp':
-            self.c_profiler.enable()
 
-    @classmethod
-    def cProfilerDisable(cls, self):
-        if self.profiler == 'cp':
-            self.c_profiler.disable()
+    def cProfilerEnable(self):
+        self.c_profiler.enable()
 
-    def __cprofiler_df(self):
+    def cProfilerDisable(self):
+        self.c_profiler.disable()
+
+    def cprofiler_df(self):
         stream = StringIO()
         stats = pstats.Stats(self.c_profiler, stream=stream)
         stats.print_stats()
@@ -82,6 +108,37 @@ class Profiling:
 
         df = pd.DataFrame(data, columns=cols)
         return df
+
+    def multiLineProfilerDataList(self):
+        stream = StringIO()
+        lp_wrapper = None
+        dataList = []
+        data = []
+        for func in self._funcs:
+            lp_wrapper = self.line_profiler(func)
+            lp_wrapper()
+            self.line_profiler.print_stats(stream=stream)
+            output = stream.getvalue()
+            lines = output.strip().split('\n')
+            # dataList.append(lines)
+            print(lines)
+
+        # data = [ data[8:] for data in dataList ]
+        # data = dataList
+        # return data
+
+
+
+    def multilineprofiler_df(self):
+        stream = StringIO()
+        lp_wrapper = None
+
+        data = []
+        if self._funcs is not None or self._funcs is isinstance(self._funcs, list):
+            rawList = self.multiLineProfilerDataList()
+            for l in rawList:
+                print(l)
+
 
 
     def singlelineprofiler_df(self):
@@ -115,16 +172,30 @@ class Profiling:
 
         return df
 
-
     def getCrofilerStat(self):
         df = self.cprofiler_df()
         # convert to csv
         print(f'\n---------------------------------------- {df} \n')
 
     def getSingleLineProfilerStat(self):
-        df = self.lineprofiler_df()
-        print(f'line-profiler: {df}')
+        df = self.singlelineprofiler_df()
+        print(f'line-profiler: \n{df}')
 
-    @_func.setter
-    def _func(self, value):
-        self.__func = value
+
+###########################################
+
+if __name__ == '__main__':
+    profiling = Profiling()
+    # profiling.cProfilerEnable()
+    print(func_1())
+    print(func_2())
+    print(func_3())
+    # profiling.cProfilerDisable()
+    # profiling.getCrofilerStat()
+
+    profiling.setUniFunctionLP(func_1)
+    profiling.setMultiFunctionLP([func_1, func_2, func_3])
+    # print(profiling.funcs)
+    # profiling.getSingleLineProfilerStat()
+    # print(profiling.multilineprofiler_df())
+    profiling.multilineprofiler_df()
