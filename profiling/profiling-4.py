@@ -146,22 +146,41 @@ class Profiling:
 
         data = []
         if self._funcs is not None or self._funcs is isinstance(self._funcs, list):
-            rawList = self.multiLineProfilerDataList()
-            empty_list_indices = [index for index, sublist in enumerate(rawList) if not sublist]
-            print(empty_list_indices)
-            # for data in rawList:
-            #     print(data)
-            data = []
-            for idx in range(len(empty_list_indices)):
-                if idx != 0 and idx != len(empty_list_indices)-2:
-                    obj = rawList[empty_list_indices[idx]: empty_list_indices[idx+1]]
-                    data.append(obj)
-                elif idx != 0 and idx != len(empty_list_indices)-1:
-                    obj = rawList[empty_list_indices[idx]: empty_list_indices[idx+1]]
-
-            print(data)
+            for fn in self._funcs:
+                temp = self.lp_df(fn)
+                print(temp, '\n')
 
 
+    def lp_df(self, func):
+        stream = StringIO()
+        lp_wrapper = None
+        lp_wrapper = self.line_profiler(func)
+
+        lp_wrapper()
+        self.line_profiler.print_stats(stream=stream)
+        output = stream.getvalue()
+        lines = output.strip().split('\n')
+        stream.seek(0)
+        stream.truncate(0)
+        stream.close()
+        data = []
+
+        newlines = [line.split() for line in lines[6:]]
+
+        for line in newlines[2:]:
+            if len(line) >= 6:
+                rows = {
+                    'Line': line[0],
+                    'Hits': line[1],
+                    'Time': line[2],
+                    'Per hit': line[3],
+                    '%Time': line[4],
+                    'Line contents': ' '.join(line[5:])
+                }
+                data.append(rows)
+        df = pd.DataFrame(data)
+
+        return df
 
 
     def singlelineprofiler_df(self):
