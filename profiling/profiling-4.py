@@ -1,5 +1,5 @@
 import time
-
+import subprocess
 
 def py_loop(n):
     result = 0
@@ -40,8 +40,7 @@ import time
 import subprocess
 import sys
 import os
-import line_profiler
-import tuna
+# import tuna
 import pandas as pd
 from io import StringIO
 import cProfile
@@ -121,15 +120,13 @@ class Profiling:
 
     def test(self, func):
         stream = StringIO()
-        output = ''
         lp_wrapper = self.line_profiler(func)
         lp_wrapper()
         self.line_profiler.print_stats(stream=stream)
         output = stream.getvalue()
         lines = output.strip().split('\n')
         newlines = [line.split() for line in lines]
-        output = ''
-        stream.close()
+        stream.__del__()
         return newlines
 
     def multiLineProfilerDataList(self):
@@ -144,25 +141,30 @@ class Profiling:
         stream = StringIO()
         lp_wrapper = None
 
-        data = []
+        df_list = []
         if self._funcs is not None or self._funcs is isinstance(self._funcs, list):
             for fn in self._funcs:
-                temp = self.lp_df(fn)
-                print(temp, '\n')
+                temp_df = self.lp_df(fn)
+                df_list.append(temp_df)
+
+        df = df_list[-1]
+        # cols = ['Line', 'Hits', 'Time', 'Per Hit', '%Time', 'Line Contents']
+        # df.columns = cols
+        # print(df.columns)
+        # df.to_csv('line_profiler.csv', encoding='utf-8')
+
+
 
 
     def lp_df(self, func):
         stream = StringIO()
         lp_wrapper = None
         lp_wrapper = self.line_profiler(func)
-
         lp_wrapper()
         self.line_profiler.print_stats(stream=stream)
         output = stream.getvalue()
         lines = output.strip().split('\n')
-        stream.seek(0)
-        stream.truncate(0)
-        stream.close()
+        stream.__del__()
         data = []
 
         newlines = [line.split() for line in lines[6:]]
@@ -170,12 +172,12 @@ class Profiling:
         for line in newlines[2:]:
             if len(line) >= 6:
                 rows = {
-                    'Line': line[0],
-                    'Hits': line[1],
-                    'Time': line[2],
-                    'Per hit': line[3],
-                    '%Time': line[4],
-                    'Line contents': ' '.join(line[5:])
+                    line[0],
+                    line[1],
+                    line[2],
+                    line[3],
+                    line[4],
+                    ' '.join(line[5:])
                 }
                 data.append(rows)
         df = pd.DataFrame(data)

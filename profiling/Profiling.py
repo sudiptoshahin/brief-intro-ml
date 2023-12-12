@@ -3,12 +3,12 @@ import time
 import subprocess
 import sys
 import os
-import line_profiler
-import tuna
+# import line_profiler
+# import tuna
 import pandas as pd
 from io import StringIO
 import cProfile
-from line_profiler import LineProfiler
+# from line_profiler import LineProfiler
 
 
 class Profiling:
@@ -28,7 +28,7 @@ class Profiling:
         self._func = func
         self._funcs = funcs
         self.c_profiler = cProfile.Profile()
-        self.line_profiler = LineProfiler()
+        # self.line_profiler = LineProfiler()
 
     # cp = cProfiler
     # lp = line_profiler
