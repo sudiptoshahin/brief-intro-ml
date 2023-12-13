@@ -1,5 +1,6 @@
 import time
 import subprocess
+from profiling import Profiling
 
 def py_loop(n):
     result = 0
@@ -35,199 +36,6 @@ def func_5():
 
 ################profiling################
 
-import pstats
-import time
-import subprocess
-import sys
-import os
-# import tuna
-import pandas as pd
-from io import StringIO
-import cProfile
-from line_profiler import LineProfiler
-
-
-class Profiling:
-    """
-        # profiler is a type of profiling method like (CProfiler, line_profiler)
-        # functions is a list of function or single function reference
-        # this @Profiling class needs to instantiate with these parameters
-    """
-    """
-        * pass a single function / list of function
-        * function list can be used only in line profiler
-        * method/profiler = line_profiler or CProfiler
-        * Generate CSV reports
-    """
-
-    def __init__(self, func=None, funcs=None):
-        self._func = func
-        self._funcs = funcs
-        self.c_profiler = cProfile.Profile()
-        self.line_profiler = LineProfiler()
-
-    # cp = cProfiler
-    # lp = line_profiler
-    @property
-    def func(self):
-        return self._func
-
-    # @func.setter
-    def setUniFunctionLP(self, func):
-        self._func = func
-
-    @property
-    def funcs(self):
-        return self._funcs
-
-    # @funcs.setter
-    def setMultiFunctionLP(self, funcs):
-        self._funcs = funcs
-
-
-    def cProfilerEnable(self):
-        self.c_profiler.enable()
-
-    def cProfilerDisable(self):
-        self.c_profiler.disable()
-
-    def cprofiler_df(self):
-        stream = StringIO()
-        stats = pstats.Stats(self.c_profiler, stream=stream)
-        stats.print_stats()
-        output = stream.getvalue()
-        lines = output.strip().split('\n')
-
-        data = []
-        cols = ['ncalls', 'totime', 'percall', 'cumtime', 'percall_cum', 'filename:lineno(func)']
-
-        for line in lines[5:]:
-            parts = line.split()
-            if (len(parts)) >= 6:
-                row = {
-                    'ncalls': parts[0],
-                    'totime': parts[1],
-                    'percall': parts[2],
-                    'cumtime': parts[3],
-                    'percall_cum': parts[4],
-                    'filename:lineno(func)': ' '.join(parts[5:])
-                }
-                data.append(row)
-
-        df = pd.DataFrame(data, columns=cols)
-        return df
-
-
-    def test(self, func):
-        stream = StringIO()
-        lp_wrapper = self.line_profiler(func)
-        lp_wrapper()
-        self.line_profiler.print_stats(stream=stream)
-        output = stream.getvalue()
-        lines = output.strip().split('\n')
-        newlines = [line.split() for line in lines]
-        stream.__del__()
-        return newlines
-
-    def multiLineProfilerDataList(self):
-        dataList = []
-        for func in self._funcs:
-            fn = self.test(func)
-            dataList.append(fn)
-        return dataList[-1]
-
-
-    def multilineprofiler_df(self):
-        stream = StringIO()
-        lp_wrapper = None
-
-        df_list = []
-        if self._funcs is not None or self._funcs is isinstance(self._funcs, list):
-            for fn in self._funcs:
-                temp_df = self.lp_df(fn)
-                df_list.append(temp_df)
-
-        df = df_list[-1]
-        # cols = ['Line', 'Hits', 'Time', 'Per Hit', '%Time', 'Line Contents']
-        # df.columns = cols
-        # print(df.columns)
-        # df.to_csv('line_profiler.csv', encoding='utf-8')
-
-
-
-
-    def lp_df(self, func):
-        stream = StringIO()
-        lp_wrapper = None
-        lp_wrapper = self.line_profiler(func)
-        lp_wrapper()
-        self.line_profiler.print_stats(stream=stream)
-        output = stream.getvalue()
-        lines = output.strip().split('\n')
-        stream.__del__()
-        data = []
-
-        newlines = [line.split() for line in lines[6:]]
-
-        for line in newlines[2:]:
-            if len(line) >= 6:
-                rows = {
-                    line[0],
-                    line[1],
-                    line[2],
-                    line[3],
-                    line[4],
-                    ' '.join(line[5:])
-                }
-                data.append(rows)
-        df = pd.DataFrame(data)
-
-        return df
-
-
-    def singlelineprofiler_df(self):
-        stream = StringIO()
-        lp_wrapper = None
-        if self._func is not None and self._func is not isinstance(self._func, list):
-            lp_wrapper = self.line_profiler(self._func)
-
-        lp_wrapper()
-        self.line_profiler.print_stats(stream=stream)
-        output = stream.getvalue()
-        lines = output.strip().split('\n')
-
-        data = []
-        cols = ['Line', 'Hits', 'Time', 'Per Hit', '%Time', 'Line Contents']
-
-        newlines = [line.split() for line in lines[6:]]
-
-        for line in newlines[2:]:
-            if len(line) >= 6:
-                rows = {
-                    'Line': line[0],
-                    'Hits': line[1],
-                    'Time': line[2],
-                    'Per hit': line[3],
-                    '%Time': line[4],
-                    'Line contents': ' '.join(line[5:])
-                }
-                data.append(rows)
-        df = pd.DataFrame(data)
-
-        return df
-
-    def getCrofilerStat(self):
-        df = self.cprofiler_df()
-        # convert to csv
-        print(f'\n---------------------------------------- {df} \n')
-
-    def getSingleLineProfilerStat(self):
-        df = self.singlelineprofiler_df()
-        print(f'line-profiler: \n{df}')
-
-
-###########################################
-
 if __name__ == '__main__':
     profiling = Profiling()
     # profiling.cProfilerEnable()
@@ -239,9 +47,12 @@ if __name__ == '__main__':
     # profiling.cProfilerDisable()
     # profiling.getCrofilerStat()
 
-    profiling.setUniFunctionLP(func_1)
-    profiling.setMultiFunctionLP([func_1, func_2, func_3, func_4, func_5])
+    # profiling.setUniFunctionLP(func_1)
+    # profiling.get_single_line_profiler_stat()
+
+    profiling.setMultiFunctionLP([func_1, func_2, func_3])
+    profiling.multi_df_csv([func_1, func_2, func_3])
     # print(profiling.funcs)
     # profiling.getSingleLineProfilerStat()
     # print(profiling.multilineprofiler_df())
-    profiling.multilineprofiler_df()
+    # profiling.multilineprofiler_df()

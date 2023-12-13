@@ -1,0 +1,16 @@
+,Line,Hits,Time,Per Hit,% Time,Line Contents
+0,14,1,5234258845.0,5e+09,100.0,time.sleep(5.23)
+1,15,1,79405.0,79405.0,0.0,print(py_loop(20))
+0,14,1,5234258845.0,5e+09,100.0,time.sleep(5.23)
+1,15,1,79405.0,79405.0,0.0,print(py_loop(20))
+2,Line,#,Hits,Time,Per,Hit % Time Line Contents
+3,19,1,320729058.0,3e+08,100.0,result = py_loop(1020120)
+4,20,1,124.0,124.0,0.0,return result
+0,14,1,5234258845.0,5e+09,100.0,time.sleep(5.23)
+1,15,1,79405.0,79405.0,0.0,print(py_loop(20))
+2,Line,#,Hits,Time,Per,Hit % Time Line Contents
+3,19,1,320729058.0,3e+08,100.0,result = py_loop(1020120)
+4,20,1,124.0,124.0,0.0,return result
+5,Line,#,Hits,Time,Per,Hit % Time Line Contents
+6,24,1,322063109.0,3e+08,100.0,result = py_loop(1006500)
+7,25,1,131.0,131.0,0.0,return result

@@ -3,12 +3,11 @@ import time
 import subprocess
 import sys
 import os
-# import line_profiler
-# import tuna
 import pandas as pd
 from io import StringIO
 import cProfile
-# from line_profiler import LineProfiler
+from line_profiler import LineProfiler
+import re
 
 
 class Profiling:
@@ -28,7 +27,7 @@ class Profiling:
         self._func = func
         self._funcs = funcs
         self.c_profiler = cProfile.Profile()
-        # self.line_profiler = LineProfiler()
+        self.line_profiler = LineProfiler()
 
     # cp = cProfiler
     # lp = line_profiler
@@ -47,15 +46,13 @@ class Profiling:
     def setMultiFunctionLP(self, funcs: list):
         self._funcs = funcs
 
-    @classmethod
-    def cProfilerEnable(cls, self):
-        if self.profiler == 'cp':
-            self.c_profiler.enable()
 
-    @classmethod
-    def cProfilerDisable(cls, self):
-        if self.profiler == 'cp':
-            self.c_profiler.disable()
+    def cProfilerEnable(self):
+        self.c_profiler.enable()
+
+
+    def cProfilerDisable(self):
+        self.c_profiler.disable()
 
     def __cprofiler_df(self):
         stream = StringIO()
@@ -82,7 +79,6 @@ class Profiling:
 
         df = pd.DataFrame(data, columns=cols)
         return df
-
 
     def singlelineprofiler_df(self):
         stream = StringIO()
@@ -115,16 +111,59 @@ class Profiling:
 
         return df
 
-
     def getCrofilerStat(self):
-        df = self.cprofiler_df()
-        # convert to csv
-        print(f'\n---------------------------------------- {df} \n')
+        df = self.__cprofiler_df()
+        df.to_csv('cp.csv', header=True, index=True, index_label='Index', encoding='utf-8')
 
-    def getSingleLineProfilerStat(self):
-        df = self.lineprofiler_df()
-        print(f'line-profiler: {df}')
+    def get_single_line_profiler_stat(self):
+        df = self.get_lp_obj(self._func)
+        filename = f"single_lp.csv"
+        df.to_csv(filename, header=True, index=True, index_label='Index', encoding='utf-8')
 
-    @_func.setter
-    def _func(self, value):
-        self.__func = value
+    def get_multi_line_profiler_stat(self):
+        self.multi_df_csv(self._funcs)
+        # df.to_csv('multiple_lp.csv', index=True, index_label='Index', encoding='utf-8')
+
+    #### multi function line_profile
+
+    def multi_df_csv(self, functions: list):
+        new_df_list = []
+        for idx, fn in enumerate(functions):
+            result_obj = self.get_lp_obj(fn)  # dict length = 6
+            new_df_list.append(result_obj)
+
+        new_df = pd.concat(new_df_list)
+        new_df.to_csv('multi_line_profiler1.csv')
+
+
+
+    def get_lp_obj(self, func):
+        stream = StringIO()
+
+        line_wrapper = self.line_profiler(func)
+        line_wrapper()
+        self.line_profiler.print_stats(stream=stream)
+
+        output = stream.getvalue()
+        output = re.split(r', \n', output)
+        output = ' '.join(output).strip().split('\n')
+        # stream.close()
+
+        lists = []
+        for line in output[8:]:
+            parts = line.split()
+            # print(len(parts))
+            if (len(parts)) >= 6:
+                row = {
+                    'Line': parts[0],
+                    'Hits': parts[1],
+                    'Time': parts[2],
+                    'Per Hit': parts[3],
+                    '% Time': parts[4],
+                    'Line Contents': ' '.join(parts[5:])
+                }
+                lists.append(row)
+        df = pd.DataFrame(lists)
+        return df
+
+        # return rows
