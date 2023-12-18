@@ -6,9 +6,9 @@ import pandas as pd
 import csv
 
 
-def func_1():
-    time.sleep(1.5)
-    for i in range(1000):
+def func_1(n, t):
+    time.sleep(t)
+    for i in range(n):
         res = 0
         res = res + (i ** 2)
         return res
@@ -78,7 +78,12 @@ def getLpObj(func):
     return df
 
     # return rows
-
+def fn_wrapper():
+    func_1(100, 2)
 
 if __name__ == '__main__':
-    multi_df([func_1, func_2, func_3])
+
+    def test_wrapper():
+        func_1(100, 2)
+
+    multi_df([test_wrapper, func_2, func_3])

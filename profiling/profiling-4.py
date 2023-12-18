@@ -34,25 +34,31 @@ def func_5():
     return result
 
 
-################profiling################
+################time_profiling################
 
 if __name__ == '__main__':
     profiling = Profiling()
-    # profiling.cProfilerEnable()
+    # time_profiling.cProfilerEnable()
     print(func_1())
     print(func_2())
     print(func_3())
     print(func_4())
     print(func_5())
-    # profiling.cProfilerDisable()
-    # profiling.getCrofilerStat()
 
-    # profiling.setUniFunctionLP(func_1)
-    # profiling.get_single_line_profiler_stat()
+    @profiling.do_line_profile(follow=[py_loop])
+    def test():
+        func_1()
+        func_3()
+        func_2()
+    # time_profiling.cProfilerDisable()
+    # time_profiling.getCrofilerStat()
+
+    # time_profiling.setUniFunctionLP(func_1)
+    # time_profiling.get_single_line_profiler_stat()
 
     profiling.setMultiFunctionLP([func_1, func_2, func_3])
     profiling.multi_df_csv([func_1, func_2, func_3])
-    # print(profiling.funcs)
-    # profiling.getSingleLineProfilerStat()
-    # print(profiling.multilineprofiler_df())
-    # profiling.multilineprofiler_df()
+    # print(time_profiling.funcs)
+    # time_profiling.getSingleLineProfilerStat()
+    # print(time_profiling.multilineprofiler_df())
+    # time_profiling.multilineprofiler_df()

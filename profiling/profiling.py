@@ -12,7 +12,7 @@ import re
 
 class Profiling:
     """
-        # profiler is a type of profiling method like (CProfiler, line_profiler)
+        # profiler is a type of time_profiling method like (CProfiler, line_profiler)
         # functions is a list of function or single function reference
         # this @Profiling class needs to instantiate with these parameters
     """
@@ -123,6 +123,20 @@ class Profiling:
     def get_multi_line_profiler_stat(self):
         self.multi_df_csv(self._funcs)
         # df.to_csv('multiple_lp.csv', index=True, index_label='Index', encoding='utf-8')
+
+    def do_line_profile(self, follow=[]):
+        def innrer(func):
+            def profiled_func(*args, **kwargs):
+                try:
+                    # profiler = self.line_profiler()
+                    self.line_profiler.add_function(func)
+                    for f in follow:
+                        self.line_profiler.add_function(f)
+                    self.line_profiler.enable_by_count()
+                    return func(*args, **kwargs)
+                finally:
+                    self.line_profiler.print_stats()
+                    return innrer
 
     #### multi function line_profile
 

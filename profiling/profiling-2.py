@@ -75,6 +75,6 @@ if __name__ == '__main__':
     profile.disable()
     profile.print_stats()
     # df = pd.DataFrame(profile.getstats(), columns=['ncalls', ''])
-    # df.to_csv('/home/sudiptoshahin/Projects/JupyterNotebookFiles/brief-intro-ml/profiling/test.csv')
+    # df.to_csv('/home/sudiptoshahin/Projects/JupyterNotebookFiles/brief-intro-ml/time_profiling/test.csv')
     df = profile_df(profile)
     print(df)
