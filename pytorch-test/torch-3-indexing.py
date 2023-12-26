@@ -1,7 +1,7 @@
 import torch
 
 """
-    Indexing (selecting data from tensors)
+    Indexing (selecting images from tensors)
     similar indexing as numpy
 """
 

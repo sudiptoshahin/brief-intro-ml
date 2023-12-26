@@ -26,7 +26,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
     * Text
     
     In machinelearning
-    1. Get data in numerical representation
+    1. Get images in numerical representation
     2. Build a model to learn patterns in that numerical representation
 """
 
@@ -47,14 +47,14 @@ y = weight * X + bias
 # print(f'y[: 10] = {y[: 10]}')
 
 """
-    Spliting data into training and testing
+    Spliting images into training and testing
     
 """
 train_split = int(0.8 * len(X))
 X_train, y_train = X[: train_split], y[: train_split]
 X_test, y_test = X[train_split:], y[train_split:]
 
-"""  Visualize the data  """
+"""  Visualize the images  """
 
 
 def plot_predictions(train_data=X_train, train_labels=y_train,
@@ -69,10 +69,10 @@ def plot_predictions(train_data=X_train, train_labels=y_train,
     # test_labels = test_labels.numpy()
 
     # plot training in blue
-    plt.scatter(train_data, train_labels, c='b', s=4, label='Training data')
+    plt.scatter(train_data, train_labels, c='b', s=4, label='Training images')
 
     # plot testing in green
-    plt.scatter(test_data, test_labels, c='g', s=4, label='Test data')
+    plt.scatter(test_data, test_labels, c='g', s=4, label='Test images')
 
     if predictions is not None:
         # print(f'{test_data}\n type: {type(test_data)}')
@@ -124,7 +124,7 @@ print(model0.state_dict())
 
 # making prediction using `torch.inference_mode()`
 # check how well it predicts `y_test` based on `X_test`
-# When we pass data through our model, its going to run it with forward() method
+# When we pass images through our model, its going to run it with forward() method
 
 # inference_mode() disable the gradient / all other stuffs
 # and making it faster
@@ -143,8 +143,8 @@ with torch.no_grad():
     * The whole idea of training is for a model to move from some unknown parameters to some
     known parameters. 
     Or,
-    in other words a poor representation of the data to a better 
-    representation of the data.
+    in other words a poor representation of the images to a better 
+    representation of the images.
     
     * How wrong the models predictions are is to calculate its LOSS funciton
     # THINGS WE NEED TO TRAIN:
@@ -165,7 +165,7 @@ optimizer = torch.optim.SGD(params=_params, lr=0.05)
 
 """ 
     Build a training & testing loop
-    1. loop through data
+    1. loop through images
     2. Forward pass - forward propagation
     3. Calculate the loss
     4. Optimizer zero grad
@@ -174,7 +174,7 @@ optimizer = torch.optim.SGD(params=_params, lr=0.05)
     6. Optimizer step - use optimizer to adjust our models parameters tor try and improve the loss
 """
 
-# and epoch is one loop through the data
+# and epoch is one loop through the images
 # it is a hyperparameter because we set it
 epochs = 100
 
@@ -185,7 +185,7 @@ test_loss_values = []
 
 
 # Training
-# 1. loop through the data
+# 1. loop through the images
 for epoch in range(epochs):
     # set the model in training mode
     # train mode in pytorch sets all parameters that require gradients to require gradients

@@ -129,9 +129,9 @@ print('device:cpu:-', x.device)
 
 
 # Random tensors
-# Random tensors are important because many neural networks lears is that they starts with tensors full of random numbers and then adjust those random numbers to better represent the data
+# Random tensors are important because many neural networks lears is that they starts with tensors full of random numbers and then adjust those random numbers to better represent the images
 # 
-# `starts with random numbers => look at data => update random numbers => look at data => update random numbers`
+# `starts with random numbers => look at images => update random numbers => look at images => update random numbers`
 
 random_tensor = torch.rand(3, 2)
 
@@ -160,7 +160,7 @@ ten_zeros
 
 # #### Tensors dtypes
 # 
-# **Note:** Tensor data type is one of 3 big errors we will run into pytorch and deep learning:
+# **Note:** Tensor images type is one of 3 big errors we will run into pytorch and deep learning:
 # 1. Tensors not right datatype
 # 2. tensors not right shape
 # 3. tensors not on the right device
