@@ -1,6 +1,4 @@
-import torch
 import os
-import pandas as pd
 import shutil
 
 CUSTOM_COCO_CLASSES = {
@@ -47,27 +45,6 @@ def get_image_name(imagelist):
     return tempImageList
 
 
-# read 1 by 1 file
-# for idx, file in enumerate(file_names):
-#     if idx > 0:
-#         break
-#     class_index, class_name = get_class_from_file(file)
-#
-#     with open(file, 'r') as fileTxt:
-#         contents = fileTxt.read()
-#         contentList = contents.split('\n')
-#         # print(contentList[0].split(' '))
-#         for line in contentList:
-#             tempLine = line.split(' ')
-#             if len(tempLine) == 1:
-#                 continue
-#             image_id = f"{tempLine[0]}.jpg"
-#             # print(f"id: {image_id}")
-#             # print(valid_images)
-#             for index, image_name in enumerate(image_file_names):
-#                 if image_id == image_name:
-#                     print(f'{index}: {image_id}')
-
 if __name__ == '__main__':
 
     # /home/sudiptoshahin/Documents
@@ -96,8 +73,8 @@ if __name__ == '__main__':
 
     for idx, file_name in enumerate(file_names):
         # test for 1 file only
-        if idx > 0:
-            break
+        # if idx > 0:
+        #     break
 
         class_index, class_name = get_class_from_file(file_name)
         print(idx, class_index, class_name)
@@ -114,13 +91,23 @@ if __name__ == '__main__':
                 dataImageFileName = f"{dataFileName}.jpg"
                 dataTextFileName = f"{dataFileName}.txt"
 
+                # replace image file name with class name
+                tempLine[0] = class_index
+                line = " ".join(str(txt) for txt in tempLine)
+                line = line + '\n'
+
+                temp_des_file = os.path.join(des_annotations_dir, dataTextFileName)
+                with open(temp_des_file, 'a') as file:
+                    file.write(line)
+                    file.close()
+
                 # file_images
-                # for image_file in image_file_names:
-                #     # '000000000139.jpg'
-                #     if dataImageFileName == image_file:
-                #         temp_src_img_name = dataImageFileName.zfill(16)
-                #         temp_src_file = os.path.join(src_image_dir, temp_src_img_name)
-                #
-                #         temp_des_img_file = os.path.join(des_images_dir, dataImageFileName)
-                #         shutil.copy(temp_src_file, temp_des_img_file)
+                for image_file in image_file_names:
+                    # '000000000139.jpg'
+                    if dataImageFileName == image_file:
+                        temp_src_img_name = dataImageFileName.zfill(16)
+                        temp_src_file = os.path.join(src_image_dir, temp_src_img_name)
+
+                        temp_des_img_file = os.path.join(des_images_dir, dataImageFileName)
+                        shutil.copy(temp_src_file, temp_des_img_file)
 
