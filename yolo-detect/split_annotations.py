@@ -111,3 +111,6 @@ if __name__ == '__main__':
                         temp_des_img_file = os.path.join(des_images_dir, dataImageFileName)
                         shutil.copy(temp_src_file, temp_des_img_file)
 
+
+        if idx == len(file_names):
+            print('****** completed *******')
