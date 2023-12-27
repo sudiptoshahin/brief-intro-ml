@@ -26,7 +26,7 @@ print(tensor, numpy_tensor)
  how neural networks learn
  
  starts with random number -> tensor operations -> update random number
- to try and make them better representations of the data -> and again....
+ to try and make them better representations of the images -> and again....
  
  to reduce the randomness in neural networks and pytorch comes
  the concept of a random seed

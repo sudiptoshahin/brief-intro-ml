@@ -45,10 +45,10 @@ def plot_predictions(train_data=X_train, train_labels=y_train,
     # test_labels = test_labels.numpy()
 
     # plot training in blue
-    plt.scatter(train_data, train_labels, c='b', s=4, label='Training data')
+    plt.scatter(train_data, train_labels, c='b', s=4, label='Training images')
 
     # plot testing in green
-    plt.scatter(test_data, test_labels, c='g', s=4, label='Test data')
+    plt.scatter(test_data, test_labels, c='g', s=4, label='Test images')
 
     if predictions is not None:
         # print(f'{test_data}\n type: {type(test_data)}')

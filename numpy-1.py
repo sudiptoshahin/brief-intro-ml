@@ -157,7 +157,7 @@ print(f'row4: \n{row4}')
 # print(narr.dtype)
 # print(starr.dtype)
 # 
-# # converting data to another
+# # converting images to another
 # floatArr = np.array([1.1, 2.001, 3.3321, 4.31231])
 # # newarr = floatArr.astype('i')
 # newarr = floatArr.astype(int)
