@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     # /home/sudiptoshahin/Documents
     # src_dir_path = input("Source directory: ")
-    src_dir_path = '/home/sudiptoshahin/Documents/validation-data'
+    src_dir_path = '/home/sudiptoshahin/Documents/train-data'
     # /home/sudiptoshahin/Documents/
     # des_dir_path = input('Destination directory: ')
     des_dir_path = '/home/sudiptoshahin/Documents'
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     # check desired directory is in or not
     # from *.txt files split the desired files
     # create directory in destination
-    src_image_dir = os.path.join(src_dir_path, 'val2017')
+    src_image_dir = os.path.join(src_dir_path, 'train2017')
     des_images_dir = os.path.join(des_dir_path, 'dataset', 'images')
     des_annotations_dir = os.path.join(des_dir_path, 'dataset', 'annotations')
 
