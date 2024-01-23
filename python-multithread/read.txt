@@ -1,0 +1,22 @@
+Concurrency and parallelism can achived in python
+by using THREADS, COROUTINES, MULTIPROCESSING, 
+CONCURRENT.FUTURES
+
+Concurrency -> threads, coroutines (asyncio.coroutine, asyncio.wait), asynchoronous
+
+Parallelism -> multiprocessing, concurrent.futures
+
+
+UI -> in main thread
+
+p-1 ->
+    video read
+     |
+     v
+share frame
+p-2 ->
+    get frame from process-1
+    detect / process the frame
+p-3 ->
+    get frame from process-1
+    add attribute
