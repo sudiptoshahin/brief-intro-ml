@@ -6,6 +6,7 @@ Concurrency -> threads, coroutines (asyncio.coroutine, asyncio.wait), asynchoron
 
 Parallelism -> multiprocessing, concurrent.futures
 
+https://medium.com/nerd-for-tech/concurrency-and-parallelism-in-python-a-brief-introduction-9fd19b8c6433#:~:text=Parallelism%20can%20be%20implemented%20in,on%20multiple%20processors%20or%20cores.
 
 UI -> in main thread
 
