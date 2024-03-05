@@ -5,3 +5,4 @@ dataset/video
 *.mov
 mot_labels.csv
 __pycache__/
+data
