@@ -6,3 +6,5 @@ dataset/video
 mot_labels.csv
 __pycache__/
 data
+ test20240125/yolov5
+ yolo-detect/yolov5
