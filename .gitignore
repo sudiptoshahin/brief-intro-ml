@@ -8,3 +8,8 @@ __pycache__/
 data
  test20240125/yolov5
  yolo-detect/yolov5
+
+attribute-detection/*.prototxt
+attribute-detection/*.caffemodel
+attribute-detection/*.pb
+attribute-detection/*.pbtxt
