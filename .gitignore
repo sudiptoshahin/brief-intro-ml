@@ -13,3 +13,5 @@ attribute-detection/*.prototxt
 attribute-detection/*.caffemodel
 attribute-detection/*.pb
 attribute-detection/*.pbtxt
+
+pytorch-test/models
