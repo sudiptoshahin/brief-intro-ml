@@ -15,3 +15,5 @@ attribute-detection/*.pb
 attribute-detection/*.pbtxt
 
 pytorch-test/models
+/env/
+/books/book1/datasets
